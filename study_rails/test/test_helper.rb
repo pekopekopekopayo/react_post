@@ -14,6 +14,9 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
-    # Add more helper methods to be used by all tests here...
+    def generate_token(user_id)
+      payload = { user_id: user_id, exp: 24.hours.from_now.to_i }
+      JWT.encode(payload, Rails.application.config.jwt_secret, "HS256")
+    end
   end
 end

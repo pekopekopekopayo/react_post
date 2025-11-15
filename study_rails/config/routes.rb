@@ -9,9 +9,9 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create]
 
-  resources :sessions, only: [] do
+  resources :sessions, only: [:create] do
     collection do
-      post :me
+      get :me
     end
   end
 

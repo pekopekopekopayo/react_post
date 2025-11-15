@@ -17,6 +17,25 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
   rescue_from CustomError, with: :render_custom_error_response
 
+  attr_reader :current_user
+
+  def authenticate_user
+    header = request.headers["Authorization"]
+    return unless header
+
+    token = header.split(" ").last
+    decoded = JWT.decode(token, Rails.application.config.jwt_secret, true, { algorithm: "HS256" })[0]
+    @current_user = User.find(decoded["user_id"])
+  rescue JWT::DecodeError, ActiveRecord::RecordNotFound
+    nil
+  end
+
+  def authenticate_user!
+    raise AuthenticationError if authenticate_user.nil?
+
+    @current_user
+  end
+
   private
 
   def render_unprocessable_entity_response(e)
@@ -25,5 +44,11 @@ class ApplicationController < ActionController::API
 
   def render_custom_error_response(e)
     render(json: { error: e.message }, status: e.status)
+  end
+
+  class AuthenticationError < CustomError
+    def initialize
+      super(401)
+    end
   end
 end

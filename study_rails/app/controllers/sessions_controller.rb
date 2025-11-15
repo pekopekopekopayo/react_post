@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  def me
+  before_action :authenticate_user!, only: [:me]
+
+  def create
     user = User.find_by(email: params[:email])
 
     raise AuthenticationError if user.nil? || !user.authenticate(params[:password])
 
     render(json: { token: encode_token(user.id) })
+  end
+
+  def me
+    @user = current_user
   end
 
   private
@@ -18,7 +24,7 @@ class SessionsController < ApplicationController
 
   class AuthenticationError < CustomError
     def initialize
-      super(422)
+      super(401)
     end
   end
 end
