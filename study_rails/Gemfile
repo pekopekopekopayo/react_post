@@ -9,10 +9,10 @@ gem "jbuilder"
 gem "puma", ">= 5.0"
 gem "rails", "~> 7.1.5", ">= 7.1.5.1"
 gem "sqlite3", ">= 1.4"
+gem "jwt"
 gem "tzinfo-data", platforms: [:windows, :jruby]
-
 gem "bootsnap", require: false
-
+gem "rails-i18n"
 group :development, :test do
   gem "factory_bot_rails"
   gem "pry"

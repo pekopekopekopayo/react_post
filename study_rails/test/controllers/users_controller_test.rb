@@ -27,9 +27,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       post users_url, params: user_params, as: :json
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     body = JSON.parse(response.body)
-    assert_includes body["errors"], "Name can't be blank"
+    assert_includes body["errors"], "Name에 내용을 입력해 주세요"
   end
 
   test "should not create user without email" do
@@ -39,9 +39,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       post users_url, params: user_params, as: :json
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     body = JSON.parse(response.body)
-    assert_includes body["errors"], "Email can't be blank"
+    assert_includes body["errors"], "Email에 내용을 입력해 주세요"
   end
 
   test "should not create user with invalid email format" do
@@ -51,7 +51,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       post users_url, params: user_params, as: :json
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     body = JSON.parse(response.body)
     assert body["errors"].any? { |error| error.include?("Email") }
   end
@@ -65,9 +65,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       post users_url, params: user_params, as: :json
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     body = JSON.parse(response.body)
-    assert_includes body["errors"], "Name has already been taken"
+    assert_includes body["errors"], "Name은(는) 이미 존재합니다"
   end
 
   test "should not create user with duplicate email" do
@@ -79,9 +79,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       post users_url, params: user_params, as: :json
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     body = JSON.parse(response.body)
-    assert_includes body["errors"], "Email has already been taken"
+    assert_includes body["errors"], "Email은(는) 이미 존재합니다"
   end
 
   test "should not create user with short password" do
@@ -91,9 +91,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       post users_url, params: user_params, as: :json
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     body = JSON.parse(response.body)
-    assert body["errors"].any? { |error| error.include?("Password") }
+    assert body["errors"].any? { |error| error.include?("Password") || error.include?("비밀번호") }
   end
 
   test "should not create user with mismatched password confirmation" do
@@ -105,8 +105,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       post users_url, params: user_params, as: :json
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     body = JSON.parse(response.body)
-    assert body["errors"].any? { |error| error.include?("Password confirmation") }
+    assert body["errors"].any? { |error| error == "Password은(는) 서로 일치해야 합니다" }
   end
 end

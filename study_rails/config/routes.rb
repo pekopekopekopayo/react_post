@@ -9,6 +9,12 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create]
 
+  resources :sessions, only: [] do
+    collection do
+      post :me
+    end
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
