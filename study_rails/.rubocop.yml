@@ -1,21 +1,2 @@
-require:
-  - rubocop-rails
-  - rubocop-shopify
-
-AllCops:
-  TargetRubyVersion: 3.3
-  NewCops: enable
-  Exclude:
-    - "db/schema.rb"
-    - "db/migrate/**/*"
-    - "bin/**/*"
-    - "vendor/**/*"
-    - "node_modules/**/*"
-    - "tmp/**/*"
-    - "log/**/*"
-    - "storage/**/*"
-    - "config/**/*"
-
-Shopify:
-  Enabled: true
-
+inherit_gem:
+  rubocop-shopify: rubocop.yml
